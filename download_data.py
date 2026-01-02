@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from huggingface_hub import snapshot_download
 
-token = os.getenv("HF_TOKEN", "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")
+token = os.getenv("HF_TOKEN", "")
 
 # 0. downloading dataset
 
