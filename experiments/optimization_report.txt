@@ -1,0 +1,7 @@
+MEDVQA Optimization Report
+==================================================
+
+Optimal num_workers: 4
+Expected samples/sec: 1852.6
+CPU Cores: 16
+RAM: 33.8 GB

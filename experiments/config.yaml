@@ -1,0 +1,70 @@
+# experiments/config.yaml
+# Optimized training configuration for Rationale-VLM
+
+# Hardware settings
+hardware:
+  device: "cuda"  # "cuda" or "cpu"
+  num_gpus: 1
+  precision: "mixed"  # "mixed" or "full"
+
+# Training hyperparameters - 根据你的V100 32GB GPU优化
+training:
+  batch_size: 48  # 增大到48（V100 32GB可以支持，比32更好利用显存）
+  epochs: 20
+  learning_rate: 1e-5
+  warmup_steps: 500
+  gradient_accumulation_steps: 1
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.001
+  save_checkpoint_freq: 5
+
+# Data loading optimization - 根据诊断结果优化
+data:
+  num_workers: 4  # 根据诊断结果设置为4（最优值）
+  prefetch_factor: 2  # 保持默认
+  pin_memory: true  # 启用，加速GPU数据传输
+  persistent_workers: true  # 启用，减少worker重启开销
+  cache_enabled: true  # 启用数据缓存
+  validation_split: 0.2
+
+# Model configuration
+model:
+  name: "Salesforce/blip2-opt-2.7b"
+  use_pretokenize: true  # 强烈建议启用预tokenize
+  max_length: 512
+  image_size: 224
+  patch_size: 16
+
+# Optimization settings
+optimization:
+  use_amp: true  # 启用混合精度训练（关键！）
+  gradient_clip: 1.0
+  weight_decay: 0.01
+  betas: [0.9, 0.999]
+  eps: 1e-8
+
+# Logging and monitoring
+logging:
+  level: "INFO"
+  log_file: "experiments/training.log"
+  tensorboard: false  # 根据需求开启
+  wandb: false
+  wandb_project: "medvqa"
+  wandb_entity: null
+
+# Checkpointing
+checkpoint:
+  save_dir: "experiments/checkpoints"
+  keep_last_n: 5
+  save_best: true
+  metric_for_best: "val_loss"
+  mode: "min"
+
+# 新增：性能优化专用配置
+performance:
+  # 根据你的诊断结果：1852.6 samples/sec
+  expected_samples_per_second: 1852.6
+  estimated_epoch_time_minutes: 8.8  # 32799 * 0.8 / 1852.6 / 60 ≈ 8.8分钟
+  use_gradient_checkpointing: false  # 如果OOM可开启
+  cudnn_benchmark: true  # 启用cudnn基准测试
+  tf32_enabled: true  # 启用TF32（A100/V100支持）
