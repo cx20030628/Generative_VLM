@@ -407,7 +407,7 @@ If you use this work, please cite:
 
 ```bibtex
 @article{chen2025generative,
-  title={Generative Rationale-VLM: Transparent Medical VQA with 6-Step Clinical Reasoning},
+  title={Comparative Study of Explainability in Generative VLM and CNN Baseline Models for Medical Visual Question Answering},
   author={Chen, Xi and Zhuo, Ziyue},
   journal={Advance Machine Learning (WOA7015)},
   year={2025}
